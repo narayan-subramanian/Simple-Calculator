@@ -13,6 +13,7 @@ clear(){
 }
 
 delete(){
+    this.currentoperand = this.currentoperand.toString().slice(0,-1)
 
 }
 
@@ -24,13 +25,41 @@ appendNumber(number){
 
 chooseOperation(){
     if(this.currentoperand === '') return
+    if(this.previousoperand !== '') {
+        this.compute()
+    }
     this.operation = operation
     this.previousoperand = this.currentoperand
     this.currentoperand = ''
+    
 
 }
 
 compute(){
+    let computation
+    const prev = parseFloat(this.previousoperand)
+    const current = parseFloat(this.currentoperand)
+    if(isNaN(prev) || isNaN(current)) return
+    switch(this.operation)
+    {
+        case '+':
+            computation = prev + current
+            break
+        case '-':
+            computation = prev - current
+            break
+        case '*':
+            computation = prev * current
+            break
+        case '÷':
+            computation = prev / current
+            break
+        default:
+            return
+    }
+    this.currentoperand = computation
+    this.operation = undefined
+    this.previousoperand = ''
 
 }
 updtaDisplay(){
@@ -63,3 +92,19 @@ operationButton.forEach(button => {
         calculator.updtaDisplay()
     })
 })
+
+equalsButton.addEventListener('click',button => {
+    calculator.compute()
+    calculator.updtaDisplay()
+})
+
+allclearButton.addEventListener('click',button => {
+    calculator.clear()
+    calculator.updtaDisplay()
+})
+
+deletesButton.addEventListener('click',button => {
+    calculator.delete()
+    calculator.updtaDisplay()
+})
+
